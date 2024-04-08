@@ -73,23 +73,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-<!--    <build>-->
-<!--        <pluginManagement>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-plugin-plugin</artifactId>-->
-<!--                <version>${maven-plugin-tools.version}</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>help-mojo</id>-->
-<!--                        <goals>-->
-<!--                            &lt;!&ndash; good practice is to generate help mojo for plugin &ndash;&gt;-->
-<!--                            <goal>helpmojo</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--        </pluginManagement>-->
-<!--    </build>-->
 </project>
