@@ -4,7 +4,6 @@ import de.padhie.ircclient.Message.MessageParser;
 import de.padhie.ircclient.Message.Result;
 import de.padhie.ircclient.Message.Type;
 import Test.Helper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,17 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see <a href="https://github.com/weidengeist/Willowbot/blob/main/modules/debug.py">message sample (powered by Weidengeist)</a>
  */
 public class MessageParserTest {
-    private MessageParser parser;
-
-    @BeforeEach
-    void setUp () {
-        this.parser = new MessageParser();
-    }
-
     @Test
     public void testResultWithActionMessage () {
         String raw = Helper.loadFixture("Model/line_normal-user-with-action.txt");
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PRIVMSG, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -71,7 +63,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithAnnouncement () {
         String raw = "@badge-info=subscriber/56;badges=moderator/1,subscriber/36,artist-badge/1;color=#FF0000;display-name=padhiebot;emotes=;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;login=padhiebot;mod=1;msg-id=announcement;msg-param-color=#FF0000;room-id=123456789;subscriber=1;system-msg=;tmi-sent-ts=1658754900000;user-id=98765432;user-type=mod :tmi.twitch.tv USERNOTICE #padhiebot :Attention everyone! This is an announcement.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -96,7 +88,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithBan () {
         String raw = "@room-id=123456789;target-user-id=98765432;tmi-sent-ts=1658754900000 :tmi.twitch.tv CLEARCHAT #padhiebot :iamthebanneduser";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals("#padhiebot", result.channel.name);
     }
@@ -104,7 +96,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithDeleteMessage () {
         String raw = "@login=ilikespoilingsecrets;room-id=;target-msg-id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;tmi-sent-ts=1658754900000 :tmi.twitch.tv CLEARMSG #padhiebot :This is a message that has been deleted by someone with moderator privileges.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.UNKNOWN, result.type);
         // twitch not able to have line without channel
@@ -125,7 +117,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithModUserMessage () {
         String raw = "@badge-info=subscriber/56;badges=moderator/1,subscriber/2054;color=#FF0000;display-name=padhiebot;emotes=;first-msg=0;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;mod=1;returning-chatter=0;room-id=123456789;subscriber=1;tmi-sent-ts=1658754900000;turbo=0;user-id=98765432;user-type=mod :padhiebot!padhiebot@padhiebot.tmi.twitch.tv PRIVMSG #padhiebot :I am a moderator of this channel and posted this.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PRIVMSG, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -172,7 +164,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithNormalUserMessage () {
         String raw = Helper.loadFixture("Model/line_normal-user.txt");
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PRIVMSG, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -218,7 +210,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithNormalUserMessageFirstPost () {
         String raw = "@badge-info=;badges=;client-nonce=9i8h7g6f5e4d3c2b1a;color=#FF0000;display-name=padhiebot;emotes=;first-msg=1;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;mod=0;returning-chatter=0;room-id=123456789;subscriber=0;tmi-sent-ts=1658754900000;turbo=0;user-id=98765432;user-type= :padhiebot!padhiebot@padhiebot.tmi.twitch.tv PRIVMSG #padhiebot :This is a message from an non-sub user, posting for the very first time.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PRIVMSG, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -264,7 +256,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithSubUserMessage () {
         String raw = "@badge-info=subscriber/40;badges=subscriber/36,sub-gifter/50;client-nonce=9i8h7g6f5e4d3c2b1a;color=#FF0000;display-name=padhiebot;emotes=;first-msg=0;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;mod=0;returning-chatter=0;room-id=123456789;subscriber=1;tmi-sent-ts=1658754900000;turbo=0;user-id=98765432;user-type= :padhiebot!padhiebot@padhiebot.tmi.twitch.tv PRIVMSG #padhiebot :This is a message from a subscriber.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PRIVMSG, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -313,7 +305,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithVipUserMessage () {
         String raw = "@badge-info=;badges=;client-nonce=9i8h7g6f5e4d3c2b1a;color=#FF0000;display-name=padhiebot;emotes=;first-msg=0;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;mod=0;returning-chatter=0;room-id=123456789;subscriber=0;tmi-sent-ts=1658754900000;turbo=0;user-id=98765432;user-type=;vip=1 :padhiebot!padhiebot@padhiebot.tmi.twitch.tv PRIVMSG #padhiebot :This is a message from an VIP user.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PRIVMSG, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -364,7 +356,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithRaid () {
         String raw = Helper.loadFixture("Model/line_raid.txt");
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -396,7 +388,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithPrimeSub () {
         String raw = Helper.loadFixture("Model/line_prime-sub.txt");
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -431,7 +423,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithAnonymousSubGift () {
         String raw = Helper.loadFixture("Model/line_anonymous-gift.txt");
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -468,7 +460,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithMultiSubGift () {
         String raw = "@badge-info=subscriber/20;badges=subscriber/18,sub-gifter/10;color=#652669;display-name=padhiebot;emotes=;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;login=padhiebot;mod=0;msg-id=submysterygift;msg-param-mass-gift-count=10;msg-param-origin-id=this\\sis\\san\\sorigin\\sID;msg-param-sender-count=50;msg-param-sub-plan=1000;room-id=123456789;subscriber=1;system-msg=padhiebot\\sis\\sgifting\\s10\\sTier\\s1\\sSubs\\sto\\spadhiebot\\'s\\scommunity!\\sThey\\'ve\\sgifted\\sa\\stotal\\sof\\s50\\sin\\sthe\\schannel!;tmi-sent-ts=1658754900000;user-id=98765432;user-type= :tmi.twitch.tv USERNOTICE #padhiebot";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -499,7 +491,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithSingleSubGiftFollowUp () {
         String raw = "@badge-info=subscriber/20;badges=subscriber/18,sub-gifter/10;color=#652669;display-name=padhiebot;emotes=;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;login=padhiebot;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=3;msg-param-origin-id=this\\sis\\san\\sorigin\\sID;msg-param-recipient-display-name=WillowbotGiftRecipient;msg-param-recipient-id=123456789;msg-param-recipient-user-name=willowbotgiftrecipient;msg-param-sender-count=0;msg-param-sub-plan-name=A\\ssubscription\\sname\\sfor\\sWillowbot\\sDebug\\sTester;msg-param-sub-plan=1000;room-id=123456789;subscriber=1;system-msg=padhiebot\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sWillowbotGiftRecipient!;tmi-sent-ts=1658754900000;user-id=98765432;user-type= :tmi.twitch.tv USERNOTICE #padhiebot";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -535,7 +527,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithSingleSubGiftTotalRecipient () {
         String raw = "@badge-info=subscriber/25;badges=subscriber/2024,bits/25000;color=#FF0000;display-name=padhiebot;emotes=;flags=;id=12345msgID54321-98765msgID56789-123-4u5v6w7x8y9z;login=padhiebot;mod=0;msg-id=subgift;msg-param-gift-months=1;msg-param-months=35;msg-param-origin-id=this\\sis\\san\\sorigin\\sID;msg-param-recipient-display-name=WillowbotGiftRecipient;msg-param-recipient-id=74734078;msg-param-recipient-user-name=willowbotgiftrecipient;msg-param-sender-count=50;msg-param-sub-plan-name=A\\ssubscription\\sname\\sfor\\sWillowbot\\sDebug\\sTester;msg-param-sub-plan=1000;room-id=123456789;subscriber=1;system-msg=padhiebot\\sgifted\\sa\\sTier\\s1\\ssub\\sto\\sWillowbotGiftRecipient!\\sThey\\shave\\sgiven\\s50\\sGift\\sSubs\\sin\\sthe\\schannel!;tmi-sent-ts=1658754900000;user-id=98765432;user-type= :tmi.twitch.tv USERNOTICE #padhiebot";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.USERNOTICE, result.type);
         assertEquals("#padhiebot", result.channel.name);
@@ -572,7 +564,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithWhisper () {
         String raw = "@badges=glitchcon2020/1;color=#FF0000;display-name=padhiebot;emotes=;message-id=1;thread-id=12345678_987654321;turbo=0;user-id=98765432;user-type= :padhiebot!padhiebot@padhiebot.tmi.twitch.tv WHISPER willowbotwhisperrecipient :This is a whisper message from padhiebot to WillowbotWhisperRecipient.";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.WHISPER, result.type);
         assertEquals("willowbotwhisperrecipient", result.channel.name);
@@ -604,7 +596,7 @@ public class MessageParserTest {
     @Test
     public void testResultWithPing () {
         String raw = "PING :tmi.twitch.tv";
-        Result result = this.parser.parse(raw);
+        Result result = (new MessageParser()).parse(raw);
 
         assertEquals(Type.PING, result.type);
     }
