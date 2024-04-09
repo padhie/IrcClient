@@ -6,7 +6,7 @@
 
     <groupId>de.padhie.ircclient</groupId>
     <artifactId>Java-IrcClient</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
